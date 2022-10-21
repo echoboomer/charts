@@ -12,11 +12,11 @@ CHART_REPOSITORY_NAME="echoboomer-charts"
 # Directory for chart source.
 cd charts
 
-# Enable helm push.
+# Enable helm cm-push.
 helm plugin install https://github.com/chartmuseum/helm-push.git
 echo
 
-echo "+++ :kubernetes: Analyzing and packaging Helm charts..."
+echo -e "${cGreen}[!] Analyzing and packaging Helm charts..."
 
 echo -e "${cGreen}[!] Adding Helm repository...${cNone}"
 
@@ -57,7 +57,7 @@ if [ "$CIRCLE_BRANCH" != "main" ]; then
 fi
 
 # If version exists, error out.
-if [ $CIRCLE_BRANCH != "master" ]; then
+if [ $CIRCLE_BRANCH != "main" ]; then
   echo -e "${cGreen}[!] Checking for presence of existing charts...${cNone}"
   for f in $(ls .); do
     CHART_VERSION=$(helm show chart $f | grep '^version' | sed 's/^version: //')
@@ -66,7 +66,7 @@ if [ $CIRCLE_BRANCH != "master" ]; then
       echo -e "${cRed}$f version $CHART_VERSION already exists in the repo. It will be skipped! If you want to push a new chart binary, you MUST increment the version number in Chart.yaml!${cNone}"
       echo
     else
-      echo "$f version $CHART_VERSION was not found in the repo. It will be created on master merge."
+      echo "$f version $CHART_VERSION was not found in the repo. It will be created on merge."
       echo
     fi
   done
@@ -77,7 +77,7 @@ fi
 if [ "$CIRCLE_BRANCH" != "main" ]; then
   for f in $(ls .); do
     echo -e "${cGreen}[!] Packaging preview version of $f...${cNone}"
-    helm push "$f" --force --version="$(helm show chart $f | grep '^version' | sed 's/^version: //')-preview-$(git rev-parse --short HEAD)" "$CHART_REPOSITORY_NAME"
+    helm cm-push "$f" --force --version="$(helm show chart $f | grep '^version' | sed 's/^version: //')-preview-$(git rev-parse --short HEAD)" "$CHART_REPOSITORY_NAME"
   done
   echo
 fi
@@ -89,7 +89,7 @@ if [ "$CIRCLE_BRANCH" = "main" ]; then
     CHART_VERSION=$(helm show chart $f | grep '^version' | sed 's/^version: //')
     STATUS=$(helm search repo $f --version $CHART_VERSION)
     if [ "$STATUS" = "No results found" ]; then
-      helm push "$f" $CHART_REPOSITORY_NAME
+      helm cm-push "$f" $CHART_REPOSITORY_NAME
       echo
     else
       echo -e "${cRed}$f version $CHART_VERSION already exists in the repo! Skipping.${cNone}"
