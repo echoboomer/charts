@@ -21,17 +21,17 @@ echo "+++ :kubernetes: Analyzing and packaging Helm charts..."
 echo -e "${cGreen}[!] Adding Helm repository...${cNone}"
 
 # Add repo.
-helm repo add $CHART_REPOSITORY_NAME $CHART_REPOSITORY_URL --username $HELM_REPO_USER --password $HELM_REPO_PASS
+helm repo add $CHART_REPOSITORY_NAME $CHART_REPOSITORY_URL --username "$HELM_REPO_USER" --password "$HELM_REPO_PASS"
 echo
 helm repo update
 echo
 
 # Lint all charts and add dependencies if there are any.
-if [ $CIRCLE_BRANCH != "main" ]; then
+if [ "$CIRCLE_BRANCH" != "main" ]; then
   echo -e "${cGreen}[!] Linting charts...${cNone}"
   echo
-  for f in $(ls .); do
-    helm dependency build ${f}
+  for f in .; do
+    helm dependency build "$f"
     echo
     helm lint ${f}
     echo
@@ -40,13 +40,13 @@ if [ $CIRCLE_BRANCH != "main" ]; then
 fi
 
 # Run tests if present.
-if [ $CIRCLE_BRANCH != "main" ]; then
+if [ "$CIRCLE_BRANCH" != "main" ]; then
   echo -e "${cGreen}[!] Checking for chart unit tests...${cNone}"
   echo
-  for f in $(ls .); do
+  for f in .; do
     if [[ -d "$f/test" ]]; then
       echo -e "${cGreen}[!] Running unit tests for $f...${cNone}"
-      bats $f/test/unit
+      bats "$f/test/unit"
       echo
     else
       echo "No unit tests found for $f."
@@ -59,7 +59,7 @@ fi
 # If version exists, error out.
 if [ $CIRCLE_BRANCH != "master" ]; then
   echo -e "${cGreen}[!] Checking for presence of existing charts...${cNone}"
-  for f in $(ls .); do
+  for f in .; do
     CHART_VERSION=$(helm show chart $f | grep '^version' | sed 's/^version: //')
     STATUS=$(helm search repo $f --version $CHART_VERSION)
     if [ "$STATUS" != "No results found" ]; then
@@ -74,22 +74,22 @@ if [ $CIRCLE_BRANCH != "master" ]; then
 fi
 
 # Package preview chart version on branch.
-if [ $CIRCLE_BRANCH != "main" ]; then
-  for f in $(ls .); do
+if [ "$CIRCLE_BRANCH" != "main" ]; then
+  for f in .; do
     echo -e "${cGreen}[!] Packaging preview version of $f...${cNone}"
-    helm push $f --force --version="$(helm show chart $f | grep '^version' | sed 's/^version: //')-preview-$(git rev-parse --short HEAD)" $CHART_REPOSITORY_NAME
+    helm push "$f" --force --version="$(helm show chart $f | grep '^version' | sed 's/^version: //')-preview-$(git rev-parse --short HEAD)" "$CHART_REPOSITORY_NAME"
   done
   echo
 fi
 
 # Package on merge.
-if [ $CIRCLE_BRANCH = "main" ]; then
+if [ "$CIRCLE_BRANCH" = "main" ]; then
   echo -e "${cGreen}[!] Packaging charts...${cNone}"
-  for f in $(ls .); do
+  for f in .; do
     CHART_VERSION=$(helm show chart $f | grep '^version' | sed 's/^version: //')
     STATUS=$(helm search repo $f --version $CHART_VERSION)
     if [ "$STATUS" = "No results found" ]; then
-      helm push $f $CHART_REPOSITORY_NAME
+      helm push "$f" $CHART_REPOSITORY_NAME
       echo
     else
       echo -e "${cRed}$f version $CHART_VERSION already exists in the repo! Skipping.${cNone}"

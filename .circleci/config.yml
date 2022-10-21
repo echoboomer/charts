@@ -14,5 +14,6 @@ workflows:
       - shellcheck/check:
           dir: ./scripts
       - package:
+          context: helm-charts-repository
           requires:
             - shellcheck/check
