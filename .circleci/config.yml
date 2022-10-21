@@ -1,0 +1,18 @@
+version: 2.1
+orbs:
+  shellcheck: circleci/shellcheck@3.1.2
+jobs:
+  package:
+    docker:
+      - image: eb129/docker-kubectl:v1.0.1
+    steps:
+      - checkout
+      - run: scripts/helm.sh
+workflows:
+  package:
+    jobs:
+      - shellcheck/check:
+          dir: ./scripts
+      - package:
+          requires:
+            - shellcheck/check
