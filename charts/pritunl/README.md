@@ -8,7 +8,7 @@ Don't skip over the "Important Considerations" section at the end before install
 
 **NOTE:** Install a `mongodb` chart first! Don't skip this step. Once that's done, you can install the `pritunl` chart using the typical commands. The chart, by default, expects `mongodb` to be reachable via `pritunl-mongodb.{{ .Release.Namespace }}.svc.cluster.local`.
 
-**HoweverIf** - if you want to run with built-in `mongodb` without an external database, set `mongo.useLocalDB` to `true`. This will use `mongodb` directly on the Pritunl `Pods`, but this will not persist your data. This is handy for a proof-of-concept or for testing.
+**However** - if you want to run with built-in `mongodb` without an external database, set `mongo.useLocalDB` to `true`. This will use `mongodb` directly on the Pritunl `Pods`, but this will not persist your data. This is handy for a proof-of-concept or for testing.
 
 ## Prerequisites
 

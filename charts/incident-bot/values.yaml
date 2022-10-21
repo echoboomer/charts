@@ -12,8 +12,8 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 database:
-  enabled: true
-  password: foobar1234
+  enabled: false
+  password:
 
 envVars:
   AUTH0_DOMAIN: mydomain
@@ -27,24 +27,24 @@ envVars:
   INCIDENT_AUTO_CREATE_FROM_REACT_EMOJI_NAME: create-incident
   PAGERDUTY_INTEGRATION_ENABLED: false
   STATUSPAGE_INTEGRATION_ENABLED: false
-  CONFLUENCE_API_URL: https://echoboomer-test.atlassian.net
-  CONFLUENCE_API_USERNAME: scott@echoboomer.net
-  CONFLUENCE_API_TOKEN: ElGZzkz16FQS7FOJN3Kk93B4
-  CONFLUENCE_SPACE: ENGINEERIN
-  CONFLUENCE_PARENT_PAGE: RCAs
+  CONFLUENCE_API_URL:
+  CONFLUENCE_API_USERNAME:
+  CONFLUENCE_API_TOKEN:
+  CONFLUENCE_SPACE:
+  CONFLUENCE_PARENT_PAGE:
   STATUSPAGE_API_KEY:
   STATUSPAGE_PAGE_ID:
   STATUSPAGE_URL:
-  PAGERDUTY_API_USERNAME: me@foo.com
+  PAGERDUTY_API_USERNAME:
   POSTGRES_HOST: db
   POSTGRES_DB: incident_bot
   POSTGRES_USER: incident_bot
-  POSTGRES_PASSWORD: foobar1234
+  POSTGRES_PASSWORD:
   POSTGRES_PORT: 5432
-  SLACK_APP_TOKEN: xapp-1-A0361A6MK2R-4040074216580-7eb70fc137889ef82f0c97b65cd682a78898074258cbf10ac79e67d42cb2e179
-  SLACK_BOT_TOKEN: xoxb-495823307894-3208244938114-8gQfQg29TPQ0ZJZYcbpvc9PG
-  DEFAULT_WEB_ADMIN_PASSWORD: foobar1234
-  JWT_SECRET_KEY: aflksamflkfgmdslgvmweuig340g43mglrekm
+  SLACK_APP_TOKEN:
+  SLACK_BOT_TOKEN:
+  DEFAULT_WEB_ADMIN_PASSWORD:
+  JWT_SECRET_KEY:
 
 healthCheck:
   enabled: true
@@ -57,7 +57,7 @@ healthCheck:
 
 image:
   repository: eb129/incident-bot
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 imagePullSecrets: []
 
@@ -68,14 +68,14 @@ ingress:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - host: incident-bot.echoboomer.net
+    - host: incident-bot.mydomain.com
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
     - secretName: incident-bot-tls
       hosts:
-        - incident-bot.echoboomer.net
+        - incident-bot.mydomain.com
 
 nodeSelector: {}
 
