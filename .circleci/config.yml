@@ -11,5 +11,3 @@ workflows:
     jobs:
       - package:
           context: helm-charts-repository
-          requires:
-            - shellcheck/check
