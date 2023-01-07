@@ -31,6 +31,7 @@ envVars:
   INCIDENT_AUTO_CREATE_FROM_REACT_EMOJI_NAME: create-incident
   PAGERDUTY_INTEGRATION_ENABLED: false
   STATUSPAGE_INTEGRATION_ENABLED: false
+  ZOOM_AUTO_CREATE: false
 
 healthCheck:
   enabled: true
