@@ -2,10 +2,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  metadata:
-    name: {{ include "incident-bot.fullname" . }}-config
-    labels:
-      {{- include "incident-bot.labels" . | nindent 4 }}
+  name: {{ include "incident-bot.fullname" . }}-config
+  labels:
+    {{- include "incident-bot.labels" . | nindent 4 }}
 data:
   config.yaml: |
 {{ toYaml .Values.configMap.data | indent 4 }}
