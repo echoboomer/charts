@@ -73,6 +73,17 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.configMap.create }}
+          volumeMounts:
+            - name: {{ include "incident-bot.fullname" . }}-config
+              mountPath: /config/{{ include "incident-bot.fullname" . }}
+          {{- end }}
+      {{- if .Values.configMap.create }}
+      volumes:
+        - name: {{ include "incident-bot.fullname" . }}-config
+          configMap:
+            name: {{ include "incident-bot.fullname" . }}-config
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
