@@ -30,7 +30,10 @@ configMap:
       - monitoring
       - resolved
     options:
-      incident_channel_topic: 'This is the default incident channel topic. You can edit it in settings.'
+      channel_topic:
+        default: 'This is the default incident channel topic. You can edit it in settings.'
+        # If set to true, set the channel topic to the meeting link. This will override incident_channel_topic.
+        # set_to_meeting_link: true
       timezone: UTC
       conference_bridge_link: 'https://zoom.us'
       create_from_reaction:
@@ -110,11 +113,11 @@ replicaCount: 1
 
 resources:
   limits:
-    cpu: 1000m
+    cpu: 500m
     memory: 512M
   requests:
     cpu: 250m
-    memory: 256M
+    memory: 128M
 
 securityContext:
   {}
