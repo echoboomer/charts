@@ -71,6 +71,7 @@ healthCheck:
 
 image:
   repository: eb129/incident-bot
+  # tag:
   pullPolicy: Always
 
 imagePullSecrets: []
