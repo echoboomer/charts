@@ -4,12 +4,16 @@
 
 affinity: {}
 
+args: []
+
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
+
+command: []
 
 configMap:
   create: true
@@ -56,6 +60,8 @@ configMap:
 database:
   enabled: false
   password:
+
+deploymentAnnotations: {}
 
 envFromSecret:
   enabled: false
