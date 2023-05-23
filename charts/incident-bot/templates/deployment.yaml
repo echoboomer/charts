@@ -4,6 +4,10 @@ metadata:
   name: {{ include "incident-bot.fullname" . }}
   labels:
     {{- include "incident-bot.labels" . | nindent 4 }}
+  {{- with .Values.deploymentAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -38,6 +42,14 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:v{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.args }}
+          args:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
+          {{- with .Values.command }}
+          command:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.port | default 3000 }}
