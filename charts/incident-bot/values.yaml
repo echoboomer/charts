@@ -52,6 +52,7 @@ configMap:
         groups:
           - my-slack-group
           - my-other-slack-group
+      skip_logs_for_user_agent: []
     integrations: {}
     links:
       incident_guide: https://changeme.com
