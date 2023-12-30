@@ -81,3 +81,10 @@ Rendered environment variables
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{/*
+Rendered image
+*/}}
+{{- define "incident-bot.image.rendered" -}}
+"{{ .Values.image.repository }}:v{{ .Values.image.tag | default .Chart.AppVersion }}{{ if .Values.image.suffix }}-{{ .Values.image.suffix}}{{ end }}"
+{{- end }}
